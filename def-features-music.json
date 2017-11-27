@@ -1,0 +1,93 @@
+{
+  "featureset": {
+    "name": "docs_features",
+    "features": [
+      {
+        "name": "1",
+        "params": [
+          "keywords"
+        ],
+        "template": {
+          "match": {
+            "title": "{{keywords}}"
+          }
+        }
+      },
+      {
+        "name": "2",
+        "params": [
+          "keywords"
+        ],
+        "template": {
+          "match": {
+            "artist": "{{keywords}}"
+          }
+        }
+      },
+      {
+        "name": "3",
+        "params": [
+          "keywords"
+        ],
+        "template": {
+          "match_explorer": {
+            "type": "min_raw_df",
+            "query" : {
+              "match" : {
+                "title": "{{keywords}}"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "4",
+        "params": [
+          "keywords"
+        ],
+        "template": {
+          "match_explorer": {
+            "type": "max_raw_df",
+            "query" : {
+              "match" : {
+                "title": "{{keywords}}"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "5",
+        "params": [
+          "keywords"
+        ],
+        "template": {
+          "match_explorer": {
+            "type": "min_raw_df",
+            "query" : {
+              "match" : {
+                "artist": "{{keywords}}"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "6",
+        "params": [
+          "keywords"
+        ],
+        "template": {
+          "match_explorer": {
+            "type": "max_raw_df",
+            "query" : {
+              "match" : {
+                "artist": "{{keywords}}"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

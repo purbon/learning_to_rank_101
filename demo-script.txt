@@ -1,0 +1,169 @@
+GET _cat/indices
+
+GET docs/_count
+
+DELETE _ltr
+
+PUT _ltr
+
+GET _ltr/_featureset/docs_features
+
+POST docs/_search
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "terms": {
+            "_id": [
+              "353725446"
+            ]
+          }
+        },
+        {
+          "sltr": {
+            "_name": "logged_featureset",
+            "featureset": "docs_features",
+            "params": {
+              "keywords": "thriller"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "ext": {
+    "ltr_log": {
+      "log_specs": {
+        "name": "log_entry1",
+        "named_query": "logged_featureset",
+        "missing_as_zero": true
+      }
+    }
+  }
+}
+
+GET .ltrstore/_search
+
+
+GET .ltrstore/store/model-mlm
+
+
+GET _ltr/_cachestats
+
+GET _ltr/_clearcache
+
+POST docs/_search
+{
+  "query": {
+    "simple_query_string": {
+      "query": "thriller",
+      "fields": ["_all"]
+    }
+  }
+}
+
+
+POST docs/_search
+{
+  "query": {
+    "simple_query_string": {
+      "query": "thriller",
+      "fields": ["_all"]
+    }
+  },
+  "rescore": {
+    "window_size": 10,
+    "query": {
+      "rescore_query": {
+        "sltr": {
+          "params": {
+            "keywords": "thriller"
+          },
+          "model": "mlm"
+        }
+      }
+    }
+  }
+}
+
+GET docs/_search
+{
+  "query": {
+    "query_string": {
+      "default_field": "_all",
+      "query": "the police"
+    }
+  }
+}
+
+GET docs/_search
+{
+  "query": {
+    "query_string": {
+      "default_field": "_all",
+      "query": "the police"
+    }
+  },
+  "rescore": {
+    "window_size": 1000,
+    "query": {
+      "rescore_query": {
+        "sltr": {
+          "params": {
+            "keywords": "the police"
+          },
+          "model": "mlm"
+        }
+      }
+    }
+  }
+}
+
+
+POST docs/_search
+{
+  "query": {
+    "simple_query_string": {
+      "query": "thriller",
+      "fields": ["_all"]
+    }
+  },
+  "rescore": {
+    "window_size": 1000,
+    "query": {
+      "rescore_query": {
+        "sltr": {
+          "params": {
+            "keywords": "thriller"
+          },
+          "model": "mll"
+        }
+      }
+    }
+  }
+}
+
+GET docs/_search
+{
+  "query": {
+    "query_string": {
+      "default_field": "_all",
+      "query": "the police"
+    }
+  },
+  "rescore": {
+    "window_size": 1000,
+    "query": {
+      "rescore_query": {
+        "sltr": {
+          "params": {
+            "keywords": "the police"
+          },
+          "model": "mll"
+        }
+      }
+    }
+  }
+}
+

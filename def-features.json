@@ -1,0 +1,45 @@
+{
+  "featureset": {
+    "name": "docs_features",
+    "features": [
+      {
+        "name": "1",
+        "params": [
+          "keywords"
+        ],
+        "template": {
+          "match": {
+            "title": "{{keywords}}"
+          }
+        }
+      },
+      {
+        "name": "2",
+        "params": [
+          "keywords"
+        ],
+        "template": {
+          "match": {
+            "description": "{{keywords}}"
+          }
+        }
+      },
+      {
+        "name": "3",
+        "params": [
+          "keywords"
+        ],
+        "template": {
+          "match_explorer": {
+            "type": "max_raw_df",
+            "query" : {
+              "match" : {
+                "title": "{{keywords}}"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

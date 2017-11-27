@@ -1,0 +1,25 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    elasticsearch (6.0.0)
+      elasticsearch-api (= 6.0.0)
+      elasticsearch-transport (= 6.0.0)
+    elasticsearch-api (6.0.0)
+      multi_json
+    elasticsearch-transport (6.0.0)
+      faraday
+      multi_json
+    faraday (0.13.1)
+      multipart-post (>= 1.2, < 3)
+    multi_json (1.12.2)
+    multipart-post (2.0.0)
+
+PLATFORMS
+  java
+  ruby
+
+DEPENDENCIES
+  elasticsearch
+
+BUNDLED WITH
+   1.15.4
