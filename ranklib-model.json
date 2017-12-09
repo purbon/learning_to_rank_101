@@ -1,0 +1,9 @@
+{
+  model: {
+    name: name,
+    model: {
+      type: "model/ranklib",
+      definition: model
+    }
+  }
+}
