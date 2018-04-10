@@ -8,8 +8,9 @@
           "keywords"
         ],
         "template": {
-          "match": {
-            "title": "{{keywords}}"
+          "multi_match": {
+            "query": "{{keywords}}",
+            "fields": ["artist", "title"]
           }
         }
       },
@@ -30,13 +31,8 @@
           "keywords"
         ],
         "template": {
-          "match_explorer": {
-            "type": "min_raw_df",
-            "query" : {
-              "match" : {
-                "title": "{{keywords}}"
-              }
-            }
+          "match" : {
+            "title": "{{keywords}}"
           }
         }
       },
@@ -46,13 +42,8 @@
           "keywords"
         ],
         "template": {
-          "match_explorer": {
-            "type": "max_raw_df",
-            "query" : {
-              "match" : {
-                "title": "{{keywords}}"
-              }
-            }
+          "match" : {
+            "artist": "Michael Jackson"
           }
         }
       },
@@ -62,32 +53,14 @@
           "keywords"
         ],
         "template": {
-          "match_explorer": {
-            "type": "min_raw_df",
-            "query" : {
-              "match" : {
-                "artist": "{{keywords}}"
-              }
-            }
-          }
-        }
-      },
-      {
-        "name": "6",
-        "params": [
-          "keywords"
-        ],
-        "template": {
-          "match_explorer": {
-            "type": "max_raw_df",
-            "query" : {
-              "match" : {
-                "artist": "{{keywords}}"
-              }
-            }
+          "match" : {
+            "artist": "The Police"
           }
         }
       }
     ]
   }
 }
+
+
+

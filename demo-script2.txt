@@ -1,6 +1,38 @@
 GET _cat/indices
 
+DELETE docs
+
+PUT docs 
+{
+  "settings": {
+    "index": {
+        "number_of_replicas" : 0
+    }
+
+  }, 
+  "mappings": {
+    "docs": {
+      "properties": {
+        "title": {
+          "type": "text"
+        }
+      }
+    }
+  }
+}
+
+GET docs/_search
+{
+  "query": {
+   "match": {
+     "artist": "thriller"
+   }
+  }
+}
+
 GET docs/_count
+
+GET docs/_search
 
 DELETE _ltr
 
@@ -16,7 +48,7 @@ POST docs/_search
         {
           "match": {
             "track_id": 
-              "TRQUIHC128F42ADD0D"
+              "TRQPVKB128F932C626"
           }
         },
         {
@@ -42,26 +74,33 @@ POST docs/_search
   }
 }
 
+POST docs/_search
+{
+  "size": 20, 
+  "query": {
+    "simple_query_string": {
+      "query": "thriller",
+      "fields": ["artist", "title"]
+    }
+  }
+}
 
-// java -jar RankLib-2.8.jar -ranker 9   -train data/music/judgements-with-features.log -save modelLinear.txt 
-// java -jar RankLib-2.8.jar -ranker 6   -train data/music/judgements-with-features.log -save modelLambdaMart.txt 
 
 GET .ltrstore/_search
 
-
 GET .ltrstore/store/model-mlm
-
 
 GET _ltr/_cachestats
 
-GET _ltr/_clearcache
+POST _ltr/_clearcache
 
 POST docs/_search
 {
+  "size": 20, 
   "query": {
     "simple_query_string": {
       "query": "thriller",
-      "fields": ["_all"]
+      "fields": ["artist", "title"]
     }
   }
 }
@@ -69,14 +108,15 @@ POST docs/_search
 
 POST docs/_search
 {
+  "size": 20, 
   "query": {
     "simple_query_string": {
       "query": "thriller",
-      "fields": ["_all"]
+      "fields": ["title"]
     }
   },
   "rescore": {
-    "window_size": 10,
+    "window_size": 1000,
     "query": {
       "rescore_query": {
         "sltr": {
@@ -93,9 +133,9 @@ POST docs/_search
 GET docs/_search
 {
   "query": {
-    "query_string": {
-      "default_field": "_all",
-      "query": "the police"
+    "multi_match": {
+      "query": "police",
+      "fields": ["artist", "title"]
     }
   }
 }
@@ -103,18 +143,18 @@ GET docs/_search
 GET docs/_search
 {
   "query": {
-    "query_string": {
-      "default_field": "_all",
-      "query": "the police"
+    "multi_match": {
+      "query": "police",
+      "fields": ["artist", "title"]
     }
   },
   "rescore": {
-    "window_size": 1000,
+    "window_size": 100,
     "query": {
       "rescore_query": {
         "sltr": {
           "params": {
-            "keywords": "the police"
+            "keywords": "\"the police\""
           },
           "model": "mlm"
         }
@@ -129,7 +169,7 @@ POST docs/_search
   "query": {
     "simple_query_string": {
       "query": "thriller",
-      "fields": ["_all"]
+      "fields": ["artist", "title"]
     }
   },
   "rescore": {
@@ -138,7 +178,7 @@ POST docs/_search
       "rescore_query": {
         "sltr": {
           "params": {
-            "keywords": "thriller"
+            "keywords": "the thriller"
           },
           "model": "mll"
         }
@@ -150,9 +190,9 @@ POST docs/_search
 GET docs/_search
 {
   "query": {
-    "query_string": {
-      "default_field": "_all",
-      "query": "the police"
+    "simple_query_string": {
+      "query": "police",
+      "fields": ["artist", "title"]
     }
   },
   "rescore": {
@@ -161,7 +201,7 @@ GET docs/_search
       "rescore_query": {
         "sltr": {
           "params": {
-            "keywords": "the police"
+            "keywords": "\"the police\""
           },
           "model": "mll"
         }
@@ -169,4 +209,3 @@ GET docs/_search
     }
   }
 }
-

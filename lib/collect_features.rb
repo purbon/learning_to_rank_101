@@ -22,17 +22,20 @@ module LTR
         }
       }
       ids_filter = {
-          terms: {
-            _id: ids
-          }
+        query_string: {
+          default_field: "track_id",
+          query: ids.join(" or ")
         }
+      }
       features_query = JSON.parse(File.read("join-features.json"))
       features_query["query"]["bool"]["filter"] << ids_filter
       features_query["query"]["bool"]["filter"] << { sltr: sltr_query }
 
+      puts features_query.to_json, "---"
+
       docs = client.search index: 'docs', body: features_query.to_json
       docs["hits"]["hits"].map do |hit|
-        [hit["_id"]]  + hit["fields"]["_ltrlog"][0]["log_entry1"].map { |e| "#{e['name']}:#{e['value']}" }
+        [hit["_source"]["track_id"]]  + hit["fields"]["_ltrlog"][0]["log_entry1"].map { |e| "#{e['name']}:#{e['value']}" }
       end.group_by { |d| d[0].split(":").last  }
     end
 
@@ -49,14 +52,17 @@ if __FILE__ == $0
 
     # id => "contentbean:#{id.strip.to_i}"
     queries.each do |id, terms|
-      ids = list["qid:#{id}"].map { |record| record.last[2..-1] }.map { |id| "#{id.strip.to_i}"  }
-
-      docs = eng.collect(terms, ids)
-
-      list["qid:#{id}"].each do |e|
-        id = e[2][2..-1]
-        next unless docs[id]
-        csv << ( e[0,2]+docs[id].flatten[1..-1]+["# #{id} #{terms}"])
+      ids = list["qid:#{id}"].map { |record| record.last[2..-1] }.map { |id| "#{id.strip}"  }
+      puts ids.count
+      ids.each_slice(10).each do |bucket|
+        puts bucket.count
+        docs = eng.collect(terms, bucket)
+        puts docs.count
+        list["qid:#{id}"].each do |e|
+          _id = e[2][2..-1]
+          next unless docs[_id]
+          csv << ( e[0,2]+docs[_id].flatten[1..-1]+["# #{_id} #{terms}"])
+        end
       end
     end
   end
