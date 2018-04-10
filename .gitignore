@@ -1,2 +1,3 @@
 data/books
-lib/utils/
+lib/utils/ltr.rb
+lib/utils/solr-export.rb
